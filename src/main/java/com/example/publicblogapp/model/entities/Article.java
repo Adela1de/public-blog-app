@@ -1,5 +1,6 @@
 package com.example.publicblogapp.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Article implements Serializable {
     @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public Article(String title, String text, User user)
