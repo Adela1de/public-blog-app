@@ -19,14 +19,6 @@ public class ArticleService {
 
     public List<Article> findAll(){ return articleRepository.findAll(); }
 
-    public Article createArticle(Article article, Long userId)
-    {
-        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
-        article.setUser(user);
-
-        return articleRepository.save(article);
-    }
-
     public Article findById(Long articleId)
     {
         return findArticleByIdOrElseThrowObjectNotFoundException(articleId);
@@ -65,5 +57,21 @@ public class ArticleService {
                 findById(userId).
                 orElseThrow(() -> new ObjectNotFoundException
                         ("User with id: "+userId+" does not exist for classType: "+ User.class));
+    }
+
+    public Article createArticle(Article article, Long userId)
+    {
+        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
+        article.setUser(user);
+
+        return articleRepository.save(article);
+    }
+
+    public Article updateArticle(Long id, Article article)
+    {
+        var art = findArticleByIdOrElseThrowObjectNotFoundException(id);
+        article.setId(id);
+        article.setUser(art.getUser());
+        return articleRepository.save(article);
     }
 }

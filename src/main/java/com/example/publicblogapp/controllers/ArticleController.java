@@ -3,6 +3,7 @@ package com.example.publicblogapp.controllers;
 import com.example.publicblogapp.dtos.article.ArticleDTO;
 import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.requests.article.ArticlePostRequestBody;
+import com.example.publicblogapp.requests.article.ArticlePutRequestBody;
 import com.example.publicblogapp.services.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class ArticleController {
     public ResponseEntity<Void> createArticle
             (@PathVariable Long userId, @RequestBody ArticlePostRequestBody articlePostRequestBody)
     {
-        var article = ArticleMapper.INSTANCE.toArticleDTO(articlePostRequestBody);
+        var article = ArticleMapper.INSTANCE.toArticle(articlePostRequestBody);
         var createdArticle = articleService.createArticle(article, userId);
         var uri =
                 ServletUriComponentsBuilder.
@@ -74,5 +75,15 @@ public class ArticleController {
                 toUri();
 
         return ResponseEntity.created(uri).body(null);
+    }
+
+    @PutMapping(path = "/{articleId}")
+    public ResponseEntity<ArticleDTO> updateArticle
+            (@PathVariable Long articleId, @RequestBody ArticlePutRequestBody articlePutRequestBody)
+    {
+        var article = ArticleMapper.INSTANCE.toArticle(articlePutRequestBody);
+        var updatedArticle = articleService.updateArticle(articleId, article);
+        var updatedArticleDTO = ArticleMapper.INSTANCE.toArticleDTO(updatedArticle);
+        return ResponseEntity.ok().body(updatedArticleDTO);
     }
 }
