@@ -1,5 +1,6 @@
 package com.example.publicblogapp.services;
 
+import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.Article;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
@@ -20,7 +21,7 @@ public class ArticleService {
 
     public Article createArticle(Article article, Long userId)
     {
-        var user = findUserByIdOrElseThrowRunTimeException(userId);
+        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
         article.setUser(user);
 
         return articleRepository.save(article);
@@ -28,35 +29,41 @@ public class ArticleService {
 
     public Article findById(Long articleId)
     {
-        return findArticleByIdOrElseThrowRunTimeException(articleId);
+        return findArticleByIdOrElseThrowObjectNotFoundException(articleId);
     }
 
     public List<Article> findByUser(Long userId)
     {
-        var user = findUserByIdOrElseThrowRunTimeException(userId);
+        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
         return user.getArticles();
     }
 
     public Article findByUserAndId(Long userId, Long articleId)
     {
-        var user = findUserByIdOrElseThrowRunTimeException(userId);
-        var article = findArticleByIdOrElseThrowRunTimeException(articleId);
+        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
+        var article = findArticleByIdOrElseThrowObjectNotFoundException(articleId);
 
         if(user.getArticles().contains(article)) return article;
-        else { throw new RuntimeException("Article does not exist for this user"); }
+        else
+        {
+            throw new ObjectNotFoundException
+            ("Article with id of: "+articleId+" does not exist for user with id of: "+ userId);
+        }
     }
 
-    public Article findArticleByIdOrElseThrowRunTimeException(Long articleId)
+    public Article findArticleByIdOrElseThrowObjectNotFoundException(Long articleId)
     {
         return articleRepository.
                 findById(articleId).
-                orElseThrow(() -> new RuntimeException("This article does not exist!") );
+                orElseThrow(() -> new ObjectNotFoundException
+                        ("Article with id: "+articleId+" does not exist for classType: "+ Article.class) );
     }
 
-    public User findUserByIdOrElseThrowRunTimeException(Long userId)
+    public User findUserByIdOrElseThrowObjectNotFoundException(Long userId)
     {
         return userRepository.
                 findById(userId).
-                orElseThrow(() -> new RuntimeException("This user does not exist!"));
+                orElseThrow(() -> new ObjectNotFoundException
+                        ("User with id: "+userId+" does not exist for classType: "+ User.class));
     }
 }

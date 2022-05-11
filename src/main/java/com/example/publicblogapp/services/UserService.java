@@ -1,5 +1,6 @@
 package com.example.publicblogapp.services;
 
+import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,15 @@ public class UserService {
 
     public List<User> findAll(){ return userRepository.findAll(); }
 
-    public User findById(Long id){ return findByIdOrElseThrowRuntimeException(id); }
+    public User findById(Long id){ return findByIdOrElseThrowObjectNotFoundException(id); }
 
     public User create(User user){ return userRepository.save(user); }
 
-    public User findByIdOrElseThrowRuntimeException(Long id)
+    public User findByIdOrElseThrowObjectNotFoundException(Long id)
     {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("This does not exist"));
+        return userRepository.
+                findById(id).
+                orElseThrow(() ->
+                        new ObjectNotFoundException("User with id: "+id+" does not exist for classType: "+ User.class));
     }
 }
