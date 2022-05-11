@@ -37,6 +37,15 @@ public class ArticleService {
         return user.getArticles();
     }
 
+    public Article findByUserAndId(Long userId, Long articleId)
+    {
+        var user = findUserByIdOrElseThrowRunTimeException(userId);
+        var article = findArticleByIdOrElseThrowRunTimeException(articleId);
+
+        if(user.getArticles().contains(article)) return article;
+        else { throw new RuntimeException("Article does not exist for this user"); }
+    }
+
     public Article findArticleByIdOrElseThrowRunTimeException(Long articleId)
     {
         return articleRepository.

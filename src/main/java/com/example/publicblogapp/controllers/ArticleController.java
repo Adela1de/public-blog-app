@@ -52,6 +52,14 @@ public class ArticleController {
         return ResponseEntity.ok().body(articlesDTO);
     }
 
+    @GetMapping(path = "/{userId}/{articleId}")
+    public ResponseEntity<ArticleDTO> findByUserAndId(@PathVariable Long userId, @PathVariable Long articleId)
+    {
+        var article = articleService.findByUserAndId(userId, articleId);
+        var articleDTO = ArticleMapper.INSTANCE.toArticleDTO(article);
+        return ResponseEntity.ok().body(articleDTO);
+    }
+
     @PostMapping(path = "/{userId}")
     public ResponseEntity<Void> createArticle
             (@PathVariable Long userId, @RequestBody ArticlePostRequestBody articlePostRequestBody)
