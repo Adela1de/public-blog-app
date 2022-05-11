@@ -86,4 +86,11 @@ public class ArticleController {
         var updatedArticleDTO = ArticleMapper.INSTANCE.toArticleDTO(updatedArticle);
         return ResponseEntity.ok().body(updatedArticleDTO);
     }
+
+    @DeleteMapping(path = "/{articleId}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long articleId)
+    {
+        articleService.deleteArticle(articleId);
+        return ResponseEntity.noContent().build();
+    }
 }
