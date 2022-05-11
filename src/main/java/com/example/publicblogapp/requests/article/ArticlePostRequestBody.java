@@ -1,13 +1,12 @@
-package com.example.publicblogapp.dtos.article;
+package com.example.publicblogapp.requests.article;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ArticleDTO {
+public class ArticlePostRequestBody {
 
-    private Long id;
     private String title;
     private String text;
 }

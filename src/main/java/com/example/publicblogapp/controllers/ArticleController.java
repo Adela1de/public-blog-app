@@ -2,14 +2,12 @@ package com.example.publicblogapp.controllers;
 
 import com.example.publicblogapp.dtos.article.ArticleDTO;
 import com.example.publicblogapp.mappers.ArticleMapper;
-import com.example.publicblogapp.model.entities.Article;
+import com.example.publicblogapp.requests.article.ArticlePostRequestBody;
 import com.example.publicblogapp.services.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.stream.Collectors;
 
@@ -32,5 +30,21 @@ public class ArticleController {
                 collect(Collectors.toList());
 
         return ResponseEntity.ok().body(articlesDTO);
+    }
+
+    @PostMapping(path = "/{userId}")
+    public ResponseEntity<Void> createArticle
+            (@PathVariable Long userId, @RequestBody ArticlePostRequestBody articlePostRequestBody)
+    {
+        var article = ArticleMapper.INSTANCE.toArticleDTO(articlePostRequestBody);
+        var createdArticle = articleService.createArticle(article, userId);
+        var uri =
+                ServletUriComponentsBuilder.
+                fromCurrentRequest().
+                path("{id}").
+                buildAndExpand(createdArticle.getId()).
+                toUri();
+
+        return ResponseEntity.created(uri).body(null);
     }
 }
