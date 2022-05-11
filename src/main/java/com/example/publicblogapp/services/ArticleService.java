@@ -20,12 +20,34 @@ public class ArticleService {
 
     public Article createArticle(Article article, Long userId)
     {
-        var user =
-                userRepository.
-                findById(userId).
-                orElseThrow(() -> new RuntimeException("This user does not exist!"));
+        var user = findUserByIdOrElseThrowRunTimeException(userId);
         article.setUser(user);
 
         return articleRepository.save(article);
+    }
+
+    public Article findById(Long articleId)
+    {
+        return findArticleByIdOrElseThrowRunTimeException(articleId);
+    }
+
+    public List<Article> findByUser(Long userId)
+    {
+        var user = findUserByIdOrElseThrowRunTimeException(userId);
+        return user.getArticles();
+    }
+
+    public Article findArticleByIdOrElseThrowRunTimeException(Long articleId)
+    {
+        return articleRepository.
+                findById(articleId).
+                orElseThrow(() -> new RuntimeException("This article does not exist!") );
+    }
+
+    public User findUserByIdOrElseThrowRunTimeException(Long userId)
+    {
+        return userRepository.
+                findById(userId).
+                orElseThrow(() -> new RuntimeException("This user does not exist!"));
     }
 }

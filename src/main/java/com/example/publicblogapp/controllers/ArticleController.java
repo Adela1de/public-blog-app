@@ -32,6 +32,26 @@ public class ArticleController {
         return ResponseEntity.ok().body(articlesDTO);
     }
 
+    @GetMapping(path = "/{articleId}")
+    public ResponseEntity<ArticleDTO> findById(@PathVariable Long articleId)
+    {
+        var article = articleService.findById(articleId);
+        var articleDTO = ArticleMapper.INSTANCE.toArticleDTO(article);
+        return ResponseEntity.ok().body(articleDTO);
+    }
+
+    @GetMapping(path = "/user/{userId}")
+    public ResponseEntity<Iterable<ArticleDTO>> findByUser(@PathVariable Long userId)
+    {
+        var articles = articleService.findByUser(userId);
+        var articlesDTO =
+                articles.
+                stream().
+                map(ArticleMapper.INSTANCE::toArticleDTO).
+                collect(Collectors.toList());
+        return ResponseEntity.ok().body(articlesDTO);
+    }
+
     @PostMapping(path = "/{userId}")
     public ResponseEntity<Void> createArticle
             (@PathVariable Long userId, @RequestBody ArticlePostRequestBody articlePostRequestBody)
@@ -41,7 +61,7 @@ public class ArticleController {
         var uri =
                 ServletUriComponentsBuilder.
                 fromCurrentRequest().
-                path("{id}").
+                path("/{id}").
                 buildAndExpand(createdArticle.getId()).
                 toUri();
 
