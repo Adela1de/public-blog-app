@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +31,12 @@ public class Article implements Serializable {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+    @ManyToMany
+    @JoinTable(name = "tb_article_category",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
 
     public Article(String title, String text, User user)
     {
