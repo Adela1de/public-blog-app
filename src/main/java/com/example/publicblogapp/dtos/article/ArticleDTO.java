@@ -1,6 +1,7 @@
 package com.example.publicblogapp.dtos.article;
 
 import com.example.publicblogapp.model.entities.Category;
+import com.example.publicblogapp.model.entities.Filter;
 import com.example.publicblogapp.model.entities.Tag;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,6 @@ public class ArticleDTO {
     private String text;
     private List<Category> categories;
     private List<Tag> tags;
+    private List<Filter> filters;
+
 }

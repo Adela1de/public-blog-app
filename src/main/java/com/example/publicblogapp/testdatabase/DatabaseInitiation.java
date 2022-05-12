@@ -1,13 +1,7 @@
 package com.example.publicblogapp.testdatabase;
 
-import com.example.publicblogapp.model.entities.Article;
-import com.example.publicblogapp.model.entities.Category;
-import com.example.publicblogapp.model.entities.Tag;
-import com.example.publicblogapp.model.entities.User;
-import com.example.publicblogapp.repositories.ArticleRepository;
-import com.example.publicblogapp.repositories.CategoryRepository;
-import com.example.publicblogapp.repositories.TagRepository;
-import com.example.publicblogapp.repositories.UserRepository;
+import com.example.publicblogapp.model.entities.*;
+import com.example.publicblogapp.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +15,7 @@ public class DatabaseInitiation {
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
+    private final FilterRepository filterRepository;
 
     public void initDB()
     {
@@ -45,10 +40,15 @@ public class DatabaseInitiation {
         var tag2 = new Tag("Ciencias da natureza");
         var tag3 = new Tag("Geografia");
 
+        var filter1 = new Filter("Adelaide");
+        var filter2 = new Filter("Joao");
+        var filter3 = new Filter("Nathalia");
+
         userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
         articleRepository.saveAll(Arrays.asList(art1, art2, art3, art4, art5, art6));
         categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
         tagRepository.saveAll(Arrays.asList(tag1, tag2, tag3));
+        filterRepository.saveAll(Arrays.asList(filter1, filter2,filter3));
 
         art1.getCategories().add(cat1);
         art1.getCategories().add(cat2);
@@ -71,6 +71,11 @@ public class DatabaseInitiation {
         art6.getTags().add(tag1);
         art6.getTags().add(tag2);
         art6.getTags().add(tag3);
+
+        art3.getFilters().add(filter2);
+        art4.getFilters().add(filter2);
+        art1.getFilters().add(filter1);
+        art2.getFilters().add(filter3);
 
         articleRepository.saveAll(Arrays.asList(art1, art2, art3, art4, art5, art6));
 

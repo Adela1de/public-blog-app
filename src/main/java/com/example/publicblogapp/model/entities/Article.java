@@ -43,6 +43,12 @@ public class Article implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "tb_article_filter",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "filter_id")
+    )
+    private List<Filter> filters = new ArrayList<>();
 
     public Article(String title, String text, User user)
     {
