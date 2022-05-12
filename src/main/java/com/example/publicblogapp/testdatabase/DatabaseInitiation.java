@@ -2,9 +2,11 @@ package com.example.publicblogapp.testdatabase;
 
 import com.example.publicblogapp.model.entities.Article;
 import com.example.publicblogapp.model.entities.Category;
+import com.example.publicblogapp.model.entities.Tag;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
 import com.example.publicblogapp.repositories.CategoryRepository;
+import com.example.publicblogapp.repositories.TagRepository;
 import com.example.publicblogapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class DatabaseInitiation {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
 
     public void initDB()
     {
@@ -38,9 +41,14 @@ public class DatabaseInitiation {
         var cat2 = new Category("Estudo de caso");
         var cat3 = new Category("Pesquisa de ação");
 
+        var tag1 = new Tag("Historia");
+        var tag2 = new Tag("Ciencias da natureza");
+        var tag3 = new Tag("Geografia");
+
         userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
         articleRepository.saveAll(Arrays.asList(art1, art2, art3, art4, art5, art6));
         categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+        tagRepository.saveAll(Arrays.asList(tag1, tag2, tag3));
 
         art1.getCategories().add(cat1);
         art1.getCategories().add(cat2);
@@ -52,6 +60,17 @@ public class DatabaseInitiation {
         art6.getCategories().add(cat3);
         art6.getCategories().add(cat1);
         art6.getCategories().add(cat2);
+
+        art1.getTags().add(tag1);
+        art1.getTags().add(tag2);
+        art1.getTags().add(tag3);
+        art2.getTags().add(tag3);
+        art3.getTags().add(tag1);
+        art4.getTags().add(tag2);
+        art5.getTags().add(tag3);
+        art6.getTags().add(tag1);
+        art6.getTags().add(tag2);
+        art6.getTags().add(tag3);
 
         articleRepository.saveAll(Arrays.asList(art1, art2, art3, art4, art5, art6));
 
