@@ -2,12 +2,11 @@ package com.example.publicblogapp.services;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.Article;
-import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
-import com.example.publicblogapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,7 +14,8 @@ import java.util.List;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final FilterService filterService;
 
     public List<Article> findAll(){ return articleRepository.findAll(); }
 
@@ -26,13 +26,13 @@ public class ArticleService {
 
     public List<Article> findByUser(Long userId)
     {
-        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
+        var user = userService.findByIdOrElseThrowObjectNotFoundException(userId);
         return user.getArticles();
     }
 
     public Article findByUserAndId(Long userId, Long articleId)
     {
-        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
+        var user = userService.findByIdOrElseThrowObjectNotFoundException(userId);
         var article = findArticleByIdOrElseThrowObjectNotFoundException(articleId);
 
         if(user.getArticles().contains(article)) return article;
@@ -51,17 +51,9 @@ public class ArticleService {
                         ("Article with id: "+articleId+" does not exist for classType: "+ Article.class) );
     }
 
-    public User findUserByIdOrElseThrowObjectNotFoundException(Long userId)
-    {
-        return userRepository.
-                findById(userId).
-                orElseThrow(() -> new ObjectNotFoundException
-                        ("User with id: "+userId+" does not exist for classType: "+ User.class));
-    }
-
     public Article createArticle(Article article, Long userId)
     {
-        var user = findUserByIdOrElseThrowObjectNotFoundException(userId);
+        var user = userService.findByIdOrElseThrowObjectNotFoundException(userId);
         article.setUser(user);
 
         return articleRepository.save(article);
@@ -78,5 +70,17 @@ public class ArticleService {
     public void deleteArticle(Long id)
     {
         articleRepository.deleteById(id);
+    }
+
+    public List<Article> findByFilter(Long id)
+    {
+        var filter = filterService.findById(id);
+        var articles = findAll();
+        List<Article> filteredArticles = new ArrayList<>();
+        articles.stream().forEach(art -> {
+            if(art.getFilters().contains(filter)) filteredArticles.add(art);
+        });
+
+        return filteredArticles;
     }
 }

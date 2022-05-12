@@ -93,4 +93,16 @@ public class ArticleController {
         articleService.deleteArticle(articleId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(path = "/filters/{filterId}")
+    public ResponseEntity<Iterable<ArticleDTO>> findByFilter(@PathVariable Long filterId)
+    {
+        var filteredArticles = articleService.findByFilter(filterId);
+        var filteredArticlesDTO =
+                filteredArticles.
+                stream().
+                map(ArticleMapper.INSTANCE::toArticleDTO).
+                collect(Collectors.toList());
+        return ResponseEntity.ok().body(filteredArticlesDTO);
+    }
 }
