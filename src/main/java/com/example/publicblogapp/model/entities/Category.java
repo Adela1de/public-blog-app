@@ -1,5 +1,6 @@
 package com.example.publicblogapp.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class Category implements Serializable {
     private String name;
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Article> articles = new ArrayList<>();
 
     public Category(String name)
