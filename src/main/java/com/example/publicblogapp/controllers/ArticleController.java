@@ -116,4 +116,12 @@ public class ArticleController {
         var updatedUserDTO = UserMapper.INSTANCE.toUserDTO(updatedUser);
         return ResponseEntity.ok().body(updatedUserDTO);
     }
+
+    @GetMapping(path = "/find")
+    public ResponseEntity<ArticleDTO> findByTitle(@RequestParam String title)
+    {
+        var article = articleService.findByTitle(title);
+        var articleDTO = ArticleMapper.INSTANCE.toArticleDTO(article);
+        return ResponseEntity.ok().body(articleDTO);
+    }
 }
