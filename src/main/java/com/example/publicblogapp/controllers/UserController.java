@@ -1,6 +1,8 @@
 package com.example.publicblogapp.controllers;
 
+import com.example.publicblogapp.dtos.article.ArticleDTO;
 import com.example.publicblogapp.dtos.user.UserDTO;
+import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.requests.user.UserPostRequestBody;
 import com.example.publicblogapp.services.UserService;
@@ -48,4 +50,18 @@ public class UserController {
 
         return ResponseEntity.created(uri).body(null);
     }
+
+    @GetMapping(path = "/favorites/{userId}")
+    public ResponseEntity<Iterable<ArticleDTO>> findFavorites(@PathVariable Long userId)
+    {
+        var favorites = userService.findFavorites(userId);
+        var favoritesDTO =
+                favorites.
+                stream().
+                map(ArticleMapper.INSTANCE::toArticleDTO).
+                collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(favoritesDTO);
+    }
+
 }

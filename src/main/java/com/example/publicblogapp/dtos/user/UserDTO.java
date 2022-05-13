@@ -15,5 +15,6 @@ public class UserDTO {
     private String email;
     private String passWord;
     private List<Article> articles;
+    private List<Article> favorites;
 
 }

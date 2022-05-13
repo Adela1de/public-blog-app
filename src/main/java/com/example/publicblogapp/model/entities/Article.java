@@ -49,6 +49,9 @@ public class Article implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "filter_id")
     )
     private List<Filter> filters = new ArrayList<>();
+    @ManyToMany(mappedBy = "favorites")
+    @JsonIgnore
+    private List<User> favoritedBy = new ArrayList<>();
 
     public Article(String title, String text, User user)
     {

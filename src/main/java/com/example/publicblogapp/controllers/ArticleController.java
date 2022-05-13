@@ -1,7 +1,9 @@
 package com.example.publicblogapp.controllers;
 
 import com.example.publicblogapp.dtos.article.ArticleDTO;
+import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.mappers.ArticleMapper;
+import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.requests.article.ArticlePostRequestBody;
 import com.example.publicblogapp.requests.article.ArticlePutRequestBody;
 import com.example.publicblogapp.services.ArticleService;
@@ -53,7 +55,7 @@ public class ArticleController {
         return ResponseEntity.ok().body(articlesDTO);
     }
 
-    @GetMapping(path = "/{userId}/{articleId}")
+    @GetMapping(path = "user/{userId}/{articleId}")
     public ResponseEntity<ArticleDTO> findByUserAndId(@PathVariable Long userId, @PathVariable Long articleId)
     {
         var article = articleService.findByUserAndId(userId, articleId);
@@ -104,5 +106,14 @@ public class ArticleController {
                 map(ArticleMapper.INSTANCE::toArticleDTO).
                 collect(Collectors.toList());
         return ResponseEntity.ok().body(filteredArticlesDTO);
+    }
+
+    @PutMapping(path = "/favorites/{userId}/{articleId}")
+    public ResponseEntity<UserDTO> addFavorites
+            (@PathVariable Long userId, @PathVariable Long articleId)
+    {
+        var updatedUser = articleService.addFavorites(userId, articleId);
+        var updatedUserDTO = UserMapper.INSTANCE.toUserDTO(updatedUser);
+        return ResponseEntity.ok().body(updatedUserDTO);
     }
 }

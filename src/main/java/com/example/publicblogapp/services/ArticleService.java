@@ -2,6 +2,7 @@ package com.example.publicblogapp.services;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.Article;
+import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -83,4 +84,20 @@ public class ArticleService {
 
         return filteredArticles;
     }
+
+    public Article findByTitle(String title) {
+        var article = articleRepository.findByTitle(title).orElseThrow(
+                () -> new ObjectNotFoundException("There is no article with title: "+ title));
+        return article;
+    }
+
+    public User addFavorites(Long userId, Long articleId)
+    {
+        var user = userService.findByIdOrElseThrowObjectNotFoundException(userId);
+        var article = findArticleByIdOrElseThrowObjectNotFoundException(articleId);
+        user.getFavorites().add(article);
+        var updatedUser = userService.updateUser(user);
+        return updatedUser;
+    }
+
 }

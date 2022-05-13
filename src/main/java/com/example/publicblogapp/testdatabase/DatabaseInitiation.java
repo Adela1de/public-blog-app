@@ -50,34 +50,33 @@ public class DatabaseInitiation {
         tagRepository.saveAll(Arrays.asList(tag1, tag2, tag3));
         filterRepository.saveAll(Arrays.asList(filter1, filter2,filter3));
 
-        art1.getCategories().add(cat1);
-        art1.getCategories().add(cat2);
-        art1.getCategories().add(cat3);
+        art1.getCategories().addAll(Arrays.asList(cat1, cat2, cat3));
         art2.getCategories().add(cat1);
         art3.getCategories().add(cat2);
         art4.getCategories().add(cat3);
         art5.getCategories().add(cat2);
-        art6.getCategories().add(cat3);
-        art6.getCategories().add(cat1);
-        art6.getCategories().add(cat2);
+        art6.getCategories().addAll(Arrays.asList(cat1, cat2, cat3));
 
-        art1.getTags().add(tag1);
-        art1.getTags().add(tag2);
-        art1.getTags().add(tag3);
+        art1.getTags().addAll(Arrays.asList(tag1, tag2, tag3));
         art2.getTags().add(tag3);
         art3.getTags().add(tag1);
         art4.getTags().add(tag2);
         art5.getTags().add(tag3);
-        art6.getTags().add(tag1);
-        art6.getTags().add(tag2);
-        art6.getTags().add(tag3);
+        art6.getTags().addAll(Arrays.asList(tag1, tag2, tag3));
 
         art3.getFilters().add(filter2);
         art4.getFilters().add(filter2);
         art1.getFilters().add(filter1);
         art2.getFilters().add(filter3);
 
+        user1.getFavorites().addAll(Arrays.asList(art1, art2, art3, art4));
+        user2.getFavorites().add(art5);
+        user3.getFavorites().add(art6);
+        user4.getFavorites().add(art2);
+        user5.getFavorites().add(art5);
+
         articleRepository.saveAll(Arrays.asList(art1, art2, art3, art4, art5, art6));
+        userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
 
     }
 }

@@ -30,6 +30,11 @@ public class User implements Serializable {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user")
     private List<Article> articles = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "tb_user_favorite",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id"))
+    private List<Article> favorites = new ArrayList<>();
 
     public User(String userName, String email, String passWord)
     {
