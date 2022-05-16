@@ -17,6 +17,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final UserService userService;
     private final FilterService filterService;
+    private final TagService tagService;
 
     public List<Article> findAll(){ return articleRepository.findAll(); }
 
@@ -73,16 +74,37 @@ public class ArticleService {
         articleRepository.deleteById(id);
     }
 
-    public List<Article> findByFilter(Long id)
+    public List<Article> findByFilter(Long filterId)
     {
-        var filter = filterService.findById(id);
-        var articles = findAll();
+        var filter = filterService.findById(filterId);
         List<Article> filteredArticles = new ArrayList<>();
-        articles.stream().forEach(art -> {
+        findAll().stream().forEach(art -> {
             if(art.getFilters().contains(filter)) filteredArticles.add(art);
         });
 
         return filteredArticles;
+    }
+
+    public List<Article> findByTag(Long tagId)
+    {
+        var tag = tagService.findById(tagId);
+        List<Article> articles = new ArrayList<>();
+        findAll().stream().forEach(art -> {
+            if(art.getTags().contains(tag)) articles.add(art);
+                }
+        );
+        return articles;
+    }
+
+    public List<Article> findByCategory(Long categoryId)
+    {
+        var category = tagService.findById(categoryId);
+        List<Article> articles = new ArrayList<>();
+        findAll().stream().forEach(art -> {
+                    if(art.getTags().contains(category)) articles.add(art);
+                }
+        );
+        return articles;
     }
 
     public Article findByTitle(String title) {

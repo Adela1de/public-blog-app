@@ -96,7 +96,7 @@ public class ArticleController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/filters/{filterId}")
+    @GetMapping(path = "/filter/{filterId}")
     public ResponseEntity<Iterable<ArticleDTO>> findByFilter(@PathVariable Long filterId)
     {
         var filteredArticles = articleService.findByFilter(filterId);
@@ -106,6 +106,28 @@ public class ArticleController {
                 map(ArticleMapper.INSTANCE::toArticleDTO).
                 collect(Collectors.toList());
         return ResponseEntity.ok().body(filteredArticlesDTO);
+    }
+
+    @GetMapping(path = "/tag/{tagId}")
+    public ResponseEntity<Iterable<ArticleDTO>> findByTag(@PathVariable Long tagId)
+    {
+        var articles = articleService.findByTag(tagId);
+        var articlesDTO =
+                articles.stream().
+                map(ArticleMapper.INSTANCE::toArticleDTO).
+                collect(Collectors.toList());
+        return ResponseEntity.ok().body(articlesDTO);
+    }
+
+    @GetMapping(path = "/category/{categoryId}")
+    public ResponseEntity<Iterable<ArticleDTO>> findByCategory(@PathVariable Long categoryId)
+    {
+        var articles = articleService.findByCategory(categoryId);
+        var articlesDTO =
+                articles.stream().
+                        map(ArticleMapper.INSTANCE::toArticleDTO).
+                        collect(Collectors.toList());
+        return ResponseEntity.ok().body(articlesDTO);
     }
 
     @PutMapping(path = "/favorites/{userId}/{articleId}")
@@ -124,4 +146,6 @@ public class ArticleController {
         var articleDTO = ArticleMapper.INSTANCE.toArticleDTO(article);
         return ResponseEntity.ok().body(articleDTO);
     }
+
+
 }
