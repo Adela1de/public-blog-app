@@ -31,6 +31,7 @@ public class UserController {
 
     @GetMapping(path = "/{userId}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long userId)
+
     {
         var user = userService.findById(userId);
         var userDTO = UserMapper.INSTANCE.toUserDTO(user);
