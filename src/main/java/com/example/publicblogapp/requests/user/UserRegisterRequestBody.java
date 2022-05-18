@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserPostRequestBody {
+public class UserRegisterRequestBody {
 
     private String userName;
     private String email;

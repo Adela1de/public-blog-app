@@ -13,7 +13,7 @@ public class UserDTO {
     private Long id;
     private String userName;
     private String email;
-    private String passWord;
+    private String password;
     private List<Article> articles;
     private List<Article> favorites;
 

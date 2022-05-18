@@ -26,7 +26,11 @@ public class User implements Serializable {
     @EqualsAndHashCode.Exclude
     private String email;
     @EqualsAndHashCode.Exclude
-    private String passWord;
+    private String password;
+    @EqualsAndHashCode.Exclude
+    private String role;
+    @EqualsAndHashCode.Exclude
+    private boolean enabled;
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user")
     private List<Article> articles = new ArrayList<>();
@@ -36,11 +40,11 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "article_id"))
     private List<Article> favorites = new ArrayList<>();
 
-    public User(String userName, String email, String passWord)
+    public User(String userName, String email, String password)
     {
         this.userName = userName;
         this.email = email;
-        this.passWord = passWord;
+        this.password = password;
     }
 
 }
