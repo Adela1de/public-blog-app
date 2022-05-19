@@ -24,23 +24,6 @@ public class UserController {
     private final UserService userService;
 
     private final ApplicationEventPublisher publisher;
-
-    @GetMapping
-    public ResponseEntity<Iterable<UserDTO>> findAll()
-    {
-        var users = userService.findAll();
-        var usersDTO = users.stream().map(UserMapper.INSTANCE::toUserDTO).collect(Collectors.toList());
-        return ResponseEntity.ok().body(usersDTO);
-    }
-
-    @GetMapping(path = "/{userId}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long userId)
-
-    {
-        var user = userService.findById(userId);
-        var userDTO = UserMapper.INSTANCE.toUserDTO(user);
-        return ResponseEntity.ok().body(userDTO);
-    }
     
     @PostMapping(path = "/register")
     public ResponseEntity<Void> registerUser(@RequestBody UserRegisterRequestBody userRegisterRequestBody,
@@ -68,6 +51,15 @@ public class UserController {
 
         if(result.equalsIgnoreCase("valid")) return ResponseEntity.ok().body("User created successfully");
         return ResponseEntity.badRequest().body("Bad User");
+    }
+
+    @GetMapping("/resendVerificationToken")
+    public ResponseEntity<String> resendVerificationToken(@RequestParam("token") String token,
+                                                          final HttpServletRequest request)
+    {
+        var result = userService.resendVerificationToken(token);
+        var url = applicationUrl(request) + "/users/verifyRegistration?token="+result;
+        return ResponseEntity.ok().body("Token resend successfully, lick the link to verify account: " + url);
     }
 
     @GetMapping(path = "/favorites/{userId}")

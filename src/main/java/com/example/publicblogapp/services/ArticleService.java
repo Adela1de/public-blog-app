@@ -118,7 +118,7 @@ public class ArticleService {
         var user = userService.findByIdOrElseThrowObjectNotFoundException(userId);
         var article = findArticleByIdOrElseThrowObjectNotFoundException(articleId);
         user.getFavorites().add(article);
-        var updatedUser = userService.updateUser(user);
+        var updatedUser = userService.updateOrSaveUser(user);
         return updatedUser;
     }
 

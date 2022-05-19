@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +21,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public List<User> findAll(){ return userRepository.findAll(); }
-
-    public User findById(Long id){ return findByIdOrElseThrowObjectNotFoundException(id); }
-
-    public User create(User user){ return updateOrSaveUser(user); }
 
     public User findByIdOrElseThrowObjectNotFoundException(Long id)
     {
@@ -41,16 +36,7 @@ public class UserService {
         return user.getFavorites();
     }
 
-    public User updateUser(User user)
-    {
-        findByIdOrElseThrowObjectNotFoundException(user.getId());
-        return updateOrSaveUser(user);
-    }
-
-    public User updateOrSaveUser(User user)
-    {
-        return userRepository.save(user);
-    }
+    public User updateOrSaveUser(User user) { return userRepository.save(user); }
 
     public void saveVerificationTokenForUser(User user, String token)
     {
@@ -63,7 +49,7 @@ public class UserService {
         var encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setRole("USER");
         user.setPassword(encodedPassword);
-        userRepository.save(user);
+        updateOrSaveUser(user);
         return user;
     }
 
@@ -71,18 +57,35 @@ public class UserService {
     {
         var verificationToken = verificationTokenRepository.findByToken(token);
         if(verificationToken == null) return "invalid";
+        if(!verifyIfTokenIsExpired(verificationToken)) return "Expired";
 
         var user = verificationToken.getUser();
-        var cal = Calendar.getInstance();
-
-        if( (verificationToken.getExpirationTime().getTime() - cal.getTime().getTime()) <= 0)
-        {
-            verificationTokenRepository.delete(verificationToken);
-            return "Expired!";
-        }
         user.setEnabled(true);
         userRepository.save(user);
 
         return "valid";
+    }
+
+    public String resendVerificationToken(String token)
+    {
+        var verificationToken = verificationTokenRepository.findByToken(token);
+        if(verificationToken == null) return "invalid";
+
+        verificationToken.setToken(UUID.randomUUID().toString());
+        verificationTokenRepository.save(verificationToken);
+
+        return verificationToken.getToken();
+    }
+
+    private boolean verifyIfTokenIsExpired(VerificationToken verificationToken)
+    {
+        var cal = Calendar.getInstance();
+        if( (verificationToken.getExpirationTime().getTime() - cal.getTime().getTime()) <= 0)
+        {
+            verificationTokenRepository.delete(verificationToken);
+            return false;
+        }
+
+        return true;
     }
 }
