@@ -147,5 +147,12 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleDTO);
     }
 
+    @GetMapping(path = "/comment/article/{articleId}")
+    public ResponseEntity<Iterable<String>> findByArticleComment(@PathVariable Long articleId)
+    {
+        var articles_comments = articleService.findByArticleComment(articleId);
+        return ResponseEntity.ok().body(articles_comments);
+    }
+
 
 }

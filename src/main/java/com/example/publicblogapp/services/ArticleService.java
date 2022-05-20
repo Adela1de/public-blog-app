@@ -4,6 +4,7 @@ import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.Article;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
+import com.example.publicblogapp.repositories.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class ArticleService {
     private final UserService userService;
     private final FilterService filterService;
     private final TagService tagService;
+    private final CommentRepository commentRepository;
 
     public List<Article> findAll(){ return articleRepository.findAll(); }
 
@@ -121,5 +123,12 @@ public class ArticleService {
         var updatedUser = userService.updateOrSaveUser(user);
         return updatedUser;
     }
+
+    public List<String> findByArticleComment(Long articleId)
+    {
+        var articles_comments = articleRepository.findByCommentArticleId(articleId);
+        return articles_comments;
+    }
+
 
 }
