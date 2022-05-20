@@ -66,14 +66,12 @@ public class UserService {
         return "valid";
     }
 
-    public String resendVerificationToken(String token)
+    public String generateNewVerificationToken(String oldToken)
     {
-        var verificationToken = verificationTokenRepository.findByToken(token);
+        var verificationToken = verificationTokenRepository.findByToken(oldToken);
         if(verificationToken == null) return "invalid";
-
         verificationToken.setToken(UUID.randomUUID().toString());
         verificationTokenRepository.save(verificationToken);
-
         return verificationToken.getToken();
     }
 

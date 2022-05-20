@@ -16,6 +16,7 @@ public class DatabaseInitiation {
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
     private final FilterRepository filterRepository;
+    private final CommentRepository commentRepository;
 
     public void initDB()
     {
@@ -44,11 +45,17 @@ public class DatabaseInitiation {
         var filter2 = new Filter("Joao");
         var filter3 = new Filter("Nathalia");
 
+        var com1 = new Comment("WOW!", user1, art1);
+        var com2 = new Comment("SUPER COOL!", user1, art2);
+        var com3= new Comment("No one cares!", user3, art3);
+        var com4 = new Comment("Very nice!", user4, art3);
+
         userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));
         articleRepository.saveAll(Arrays.asList(art1, art2, art3, art4, art5, art6));
         categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
         tagRepository.saveAll(Arrays.asList(tag1, tag2, tag3));
         filterRepository.saveAll(Arrays.asList(filter1, filter2,filter3));
+        commentRepository.saveAll(Arrays.asList(com1, com2, com3, com4));
 
         art1.getCategories().addAll(Arrays.asList(cat1, cat2, cat3));
         art2.getCategories().add(cat1);

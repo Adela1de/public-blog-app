@@ -1,7 +1,6 @@
 package com.example.publicblogapp.controllers;
 
 import com.example.publicblogapp.dtos.article.ArticleDTO;
-import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.event.RegistrationCompleteEvent;
 import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
@@ -54,12 +53,17 @@ public class UserController {
     }
 
     @GetMapping("/resendVerificationToken")
-    public ResponseEntity<String> resendVerificationToken(@RequestParam("token") String token,
-                                                          final HttpServletRequest request)
+    public ResponseEntity<String> resendVerificationToken(@RequestParam("token") String oldToken,
+                                                          HttpServletRequest request)
     {
-        var result = userService.resendVerificationToken(token);
-        var url = applicationUrl(request) + "/users/verifyRegistration?token="+result;
-        return ResponseEntity.ok().body("Token resend successfully, lick the link to verify account: " + url);
+        var newToken = userService.generateNewVerificationToken(oldToken);
+        return ResponseEntity.ok().body(resendVerificationTokenMail(request, newToken));
+    }
+
+    private String resendVerificationTokenMail(HttpServletRequest request, String token)
+    {
+        var url = applicationUrl(request) + "/users/verifyRegistration?token="+token;
+        return "Token resend successfully, lick the link to verify account: " + url;
     }
 
     @GetMapping(path = "/favorites/{userId}")

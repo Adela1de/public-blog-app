@@ -1,5 +1,6 @@
 package com.example.publicblogapp.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,9 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "article_id"))
     private List<Article> favorites = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user_commented")
+    private List<Comment> comments = new ArrayList<>();
 
     public User(String userName, String email, String password)
     {

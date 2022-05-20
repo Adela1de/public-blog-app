@@ -52,6 +52,9 @@ public class Article implements Serializable {
     @ManyToMany(mappedBy = "favorites")
     @JsonIgnore
     private List<User> favoritedBy = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "article_commented")
+    private List<Comment> comments = new ArrayList<>();
 
     public Article(String title, String text, User user)
     {
