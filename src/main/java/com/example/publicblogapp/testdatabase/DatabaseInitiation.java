@@ -3,6 +3,7 @@ package com.example.publicblogapp.testdatabase;
 import com.example.publicblogapp.model.entities.*;
 import com.example.publicblogapp.repositories.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -17,14 +18,15 @@ public class DatabaseInitiation {
     private final TagRepository tagRepository;
     private final FilterRepository filterRepository;
     private final CommentRepository commentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void initDB()
     {
-        var user1 = new User("Adelaide", "Luiz@Adelaide.com", "3104");
-        var user2 = new User("Nathalia", "Nathalia@Adelaide.com", "3104");
-        var user3 = new User("Joao", "Joao@Leal.com", "6666");
-        var user4 = new User("Rogerio", "Rogerin@22.com", "1111");
-        var user5 = new User("Aline", "Aline@Silva.com", "7777");
+        var user1 = new User("Adelaide", "Luiz@Adelaide.com", passwordEncoder.encode("3104"));
+        var user2 = new User("Nathalia", "Nathalia@Adelaide.com", passwordEncoder.encode("3104"));
+        var user3 = new User("Joao", "Joao@Leal.com", passwordEncoder.encode("6666"));
+        var user4 = new User("Rogerio", "Rogerin@22.com", passwordEncoder.encode("1111"));
+        var user5 = new User("Aline", "Aline@Silva.com", passwordEncoder.encode("1111"));
 
         var art1 = new Article("Aquecimento Global", "Aquecimento global está acontecendo e é ruim", user1);
         var art2 = new Article("Desigualdade social", "Desigualdade social está acontecendo e é ruim", user2);

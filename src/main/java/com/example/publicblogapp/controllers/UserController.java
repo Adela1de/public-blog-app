@@ -1,9 +1,12 @@
 package com.example.publicblogapp.controllers;
 
 import com.example.publicblogapp.dtos.article.ArticleDTO;
+import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.event.RegistrationCompleteEvent;
 import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
+import com.example.publicblogapp.model.entities.User;
+import com.example.publicblogapp.requests.user.UserLogInRequestBody;
 import com.example.publicblogapp.requests.user.UserRegisterRequestBody;
 import com.example.publicblogapp.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +80,19 @@ public class UserController {
                 collect(Collectors.toList());
 
         return ResponseEntity.ok().body(favoritesDTO);
+    }
+
+    @PostMapping(path = "/login")
+    public ResponseEntity<UserDTO> userLogIn(@RequestBody UserLogInRequestBody userLogInRequestBody)
+    {
+        User user;
+        var email = userLogInRequestBody.getEmail();
+        var password = userLogInRequestBody.getPassword();
+
+        user = userService.userLogIn(email, password);
+
+        var userLoggedDTO = UserMapper.INSTANCE.toUserDTO(user);
+        return ResponseEntity.ok().body(userLoggedDTO);
     }
 
 }

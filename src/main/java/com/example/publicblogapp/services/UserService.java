@@ -1,6 +1,7 @@
 package com.example.publicblogapp.services;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
+import com.example.publicblogapp.exceptions.UserAlreadyExistsException;
 import com.example.publicblogapp.model.entities.Article;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.model.entities.VerificationToken;
@@ -46,6 +47,9 @@ public class UserService {
 
     public User registerUser(User user)
     {
+        if(userRepository.findByEmail(user.getEmail()) != null)
+            throw  new UserAlreadyExistsException("There is already a user with this e-mail");
+
         var encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setRole("USER");
         user.setPassword(encodedPassword);
@@ -85,5 +89,12 @@ public class UserService {
         }
 
         return true;
+    }
+
+    public User userLogIn(String email, String password)
+    {
+        var user = userRepository.findByEmail(email);
+        if(passwordEncoder.matches(password, user.getPassword())) return user;
+        else{ throw new ObjectNotFoundException("Invalid e-mail or password"); }
     }
 }

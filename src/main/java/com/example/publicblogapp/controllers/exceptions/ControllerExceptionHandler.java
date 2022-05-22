@@ -1,6 +1,7 @@
 package com.example.publicblogapp.controllers.exceptions;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
+import com.example.publicblogapp.exceptions.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -25,5 +26,13 @@ public class ControllerExceptionHandler {
     {
         var error = new StandardError(System.currentTimeMillis(), e.getMessage(), HttpStatus.NOT_IMPLEMENTED.value());
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(error);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<StandardError> userAlreadyExistsException
+            (UserAlreadyExistsException e, ServletRequest request)
+    {
+        var error = new StandardError(System.currentTimeMillis(), e.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

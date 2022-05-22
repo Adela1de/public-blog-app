@@ -14,5 +14,5 @@ public class DevConfig {
     private final DatabaseInitiation databaseInitiation;
 
     @Bean
-    public void databaseInit() { databaseInitiation.initDB(); }
+    public void databaseInit() {  }
 }
