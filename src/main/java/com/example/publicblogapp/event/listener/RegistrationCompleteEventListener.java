@@ -24,8 +24,7 @@ public class RegistrationCompleteEventListener implements
         var user = event.getUser();
         var token = UUID.randomUUID().toString();
         userService.saveVerificationTokenForUser(user, token);
-
-        String url = event.getApplicationUrl()+"/users/verifyRegistration?token="+token;
-        log.info("Click the link to verify your account: {}", url);
     }
+
+
 }

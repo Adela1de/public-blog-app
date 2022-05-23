@@ -28,13 +28,18 @@ public class UserController {
     private final ApplicationEventPublisher publisher;
     
     @PostMapping(path = "/register")
-    public ResponseEntity<Void> registerUser(@RequestBody UserRegisterRequestBody userRegisterRequestBody,
+    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequestBody userRegisterRequestBody,
                                              final HttpServletRequest request)
     {
         var user = UserMapper.INSTANCE.toUser(userRegisterRequestBody);
         var registeredUser = userService.registerUser(user);
-        publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
-        return ResponseEntity.noContent().build();
+        publisher.publishEvent(new RegistrationCompleteEvent(registeredUser));
+        String url =
+                applicationUrl(request) +
+                "/users/verifyRegistration?token=" +
+                userService.
+                getVerificationTokenForUser(registeredUser.getId());
+        return ResponseEntity.ok().body(url);
     }
 
     private String applicationUrl(HttpServletRequest request)

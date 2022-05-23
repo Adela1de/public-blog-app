@@ -1,6 +1,7 @@
 package com.example.publicblogapp.services;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
+import com.example.publicblogapp.exceptions.TokenNotFoundException;
 import com.example.publicblogapp.exceptions.UserAlreadyExistsException;
 import com.example.publicblogapp.model.entities.Article;
 import com.example.publicblogapp.model.entities.User;
@@ -97,4 +98,11 @@ public class UserService {
         if(passwordEncoder.matches(password, user.getPassword())) return user;
         else{ throw new ObjectNotFoundException("Invalid e-mail or password"); }
     }
+
+    public String getVerificationTokenForUser(Long userId)
+    {
+        try{ return verificationTokenRepository.findTokenByUserId(userId); }
+        catch(Exception e){ throw new TokenNotFoundException("There is no token for this user"); }
+    }
+
 }
