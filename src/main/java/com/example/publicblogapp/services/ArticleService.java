@@ -2,17 +2,14 @@ package com.example.publicblogapp.services;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.Article;
-import com.example.publicblogapp.model.entities.Category;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
 import com.example.publicblogapp.repositories.CommentRepository;
-import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,32 +21,7 @@ public class ArticleService {
     private final TagService tagService;
     private final CommentRepository commentRepository;
 
-    public List<ArticleFindAllRequest> findAllArticlesConverted()
-    {
-        var articleRequests =
-                articleRepository.
-                findAll().
-                stream().
-                map(this::convertToArticleRequest).collect(Collectors.toList());
-        return articleRequests;
-    }
-
     public List<Article> findAll(){ return articleRepository.findAll(); }
-
-    private ArticleFindAllRequest convertToArticleRequest(Article article)
-    {
-        var articleFindAllRequest = new ArticleFindAllRequest();
-        var listOfCats = new ArrayList<String>();
-        articleFindAllRequest.setId(article.getId());
-        articleFindAllRequest.setTitle(article.getTitle());
-        articleFindAllRequest.setUsername(article.getUser().getUserName());
-        if(article.getCategories() != null)
-        {
-            for (Category cat: article.getCategories()) { listOfCats.add(cat.getName()); }
-            articleFindAllRequest.setCategories(listOfCats);
-        }
-        return articleFindAllRequest;
-    }
 
     public Article findById(Long articleId)
     {

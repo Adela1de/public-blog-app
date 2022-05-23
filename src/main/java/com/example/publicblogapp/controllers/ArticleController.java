@@ -4,6 +4,7 @@ import com.example.publicblogapp.dtos.article.ArticleDTO;
 import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
+import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
 import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
 import com.example.publicblogapp.requests.article.ArticlePostRequestBody;
 import com.example.publicblogapp.requests.article.ArticlePutRequestBody;
@@ -22,12 +23,18 @@ import java.util.stream.Collectors;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final ConvertArticlesForFrontEnd convertArticlesForFrontEnd;
 
     @GetMapping
     public ResponseEntity<Iterable<ArticleFindAllRequest>> findAll()
     {
-        var articles = articleService.findAllArticlesConverted();
-        return ResponseEntity.ok().body(articles);
+        var articles = articleService.findAll();
+        var articlesConverted =
+                articles.
+                stream().
+                map(convertArticlesForFrontEnd::convertToArticleRequest).
+                collect(Collectors.toList());
+        return ResponseEntity.ok().body(articlesConverted);
     }
 
     @GetMapping(path = "/{articleId}")
