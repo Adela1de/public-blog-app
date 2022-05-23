@@ -3,6 +3,7 @@ package com.example.publicblogapp.services;
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.exceptions.TokenNotFoundException;
 import com.example.publicblogapp.exceptions.UserAlreadyExistsException;
+import com.example.publicblogapp.exceptions.UserNameAlreadyInUseException;
 import com.example.publicblogapp.model.entities.Article;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.model.entities.VerificationToken;
@@ -49,7 +50,10 @@ public class UserService {
     public User registerUser(User user)
     {
         if(userRepository.findByEmail(user.getEmail()) != null)
-            throw  new UserAlreadyExistsException("There is already a user with this e-mail");
+            throw  new UserAlreadyExistsException("There is already a user with this e-mail!");
+
+        if(userRepository.findByUserName(user.getUserName()) != null)
+            throw new UserNameAlreadyInUseException("There is already a user with this user name!");
 
         var encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setRole("USER");
