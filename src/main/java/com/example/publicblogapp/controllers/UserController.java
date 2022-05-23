@@ -1,11 +1,11 @@
 package com.example.publicblogapp.controllers;
 
-import com.example.publicblogapp.dtos.article.ArticleDTO;
 import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.event.RegistrationCompleteEvent;
-import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
+import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
 import com.example.publicblogapp.model.entities.User;
+import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
 import com.example.publicblogapp.requests.user.UserLogInRequestBody;
 import com.example.publicblogapp.requests.user.UserRegisterRequestBody;
 import com.example.publicblogapp.services.UserService;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-
+    private final ConvertArticlesForFrontEnd convertArticlesForFrontEnd;
     private final ApplicationEventPublisher publisher;
     
     @PostMapping(path = "/register")
@@ -75,16 +75,15 @@ public class UserController {
     }
 
     @GetMapping(path = "/favorites/{userId}")
-    public ResponseEntity<Iterable<ArticleDTO>> findFavorites(@PathVariable Long userId)
+    public ResponseEntity<Iterable<ArticleFindAllRequest>> findFavorites(@PathVariable Long userId)
     {
         var favorites = userService.findFavorites(userId);
-        var favoritesDTO =
+        var favoritesConverted =
                 favorites.
                 stream().
-                map(ArticleMapper.INSTANCE::toArticleDTO).
+                map(convertArticlesForFrontEnd::convertToArticleRequest).
                 collect(Collectors.toList());
-
-        return ResponseEntity.ok().body(favoritesDTO);
+        return ResponseEntity.ok().body(favoritesConverted);
     }
 
     @PostMapping(path = "/login")
