@@ -18,4 +18,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
             "c.article_id = a.id and " +
             "a.id = ?", nativeQuery = true)
     List<String> findByCommentArticleId(Long articleId);
+
+    @Query(value = "select a.* from tb_article a " +
+            "inner join tb_user u where " +
+            "u.id = a.user_id and " +
+            "u.user_name = ?", nativeQuery = true)
+    List<Article> findByUsername(String username);
 }

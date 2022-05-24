@@ -141,7 +141,7 @@ public class ArticleController {
         return ResponseEntity.ok().body(updatedUserDTO);
     }
 
-    @GetMapping(path = "/find")
+    @GetMapping(path = "/title")
     public ResponseEntity<ArticleDTO> findByTitle(@RequestParam String title)
     {
         var article = articleService.findByTitle(title);
@@ -149,11 +149,24 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleDTO);
     }
 
+    @GetMapping(path = "/by")
+    public ResponseEntity<Iterable<ArticleFindAllRequest>> findByUsername(@RequestParam String username)
+    {
+        var articles = articleService.findByUsername(username);
+        var articlesDTO =
+                articles.
+                stream().
+                map(convertArticlesForFrontEnd::convertToArticleRequest).
+                collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(articlesDTO);
+    }
+
     @GetMapping(path = "/comment/article/{articleId}")
     public ResponseEntity<Iterable<String>> findByArticleComment(@PathVariable Long articleId)
     {
-        var articles_comments = articleService.findByArticleComment(articleId);
-        return ResponseEntity.ok().body(articles_comments);
+        var articlesComments = articleService.findByArticleComment(articleId);
+        return ResponseEntity.ok().body(articlesComments);
     }
 
 

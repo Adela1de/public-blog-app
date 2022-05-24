@@ -115,6 +115,12 @@ public class ArticleService {
         return article;
     }
 
+    public List<Article> findByUsername(String username)
+    {
+        var articles = articleRepository.findByUsername(username);
+        return articles;
+    }
+
     public User addFavorites(Long userId, Long articleId)
     {
         var user = userService.findByIdOrElseThrowObjectNotFoundException(userId);
