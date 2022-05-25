@@ -130,11 +130,5 @@ public class ArticleService {
         return updatedUser;
     }
 
-    public List<String> findByArticleComment(Long articleId)
-    {
-        var articles_comments = articleRepository.findByCommentArticleId(articleId);
-        return articles_comments;
-    }
-
 
 }

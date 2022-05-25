@@ -5,6 +5,7 @@ import com.example.publicblogapp.model.entities.Category;
 import com.example.publicblogapp.model.entities.Comment;
 import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
 import com.example.publicblogapp.requests.article.ArticleFindByIdRequest;
+import com.example.publicblogapp.requests.article.GetCommentsForArticle;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -30,11 +31,20 @@ public class ConvertArticlesForFrontEnd {
     public ArticleFindByIdRequest convertToArticleFindByIdRequest(Article article)
     {
         var articleFindByIdRequest = new ArticleFindByIdRequest();
-        var listOfComments = new ArrayList<String>();
-        var listOfUsernames = new ArrayList<String>();
         articleFindByIdRequest.setId(article.getId());
         articleFindByIdRequest.setTitle(article.getTitle());
+        articleFindByIdRequest.setText(article.getText());
         articleFindByIdRequest.setUsername(article.getUser().getUserName());
+
+        return articleFindByIdRequest;
+    }
+
+    public GetCommentsForArticle getCommentsForArticle(Article article)
+    {
+        var getCommentsForArticle = new GetCommentsForArticle();
+        var listOfComments = new ArrayList<String>();
+        var listOfUsernames = new ArrayList<String>();
+
         if(article.getComments() != null)
         {
             for(Comment com: article.getComments())
@@ -42,10 +52,10 @@ public class ConvertArticlesForFrontEnd {
                 listOfComments.add(com.getText());
                 listOfUsernames.add(com.getUser_commented().getUserName());
             }
-            articleFindByIdRequest.setComments(listOfComments);
-            articleFindByIdRequest.setCommentedBy(listOfUsernames);
+            getCommentsForArticle.setComments(listOfComments);
+            getCommentsForArticle.setCommentedBy(listOfUsernames);
         }
 
-        return articleFindByIdRequest;
+        return getCommentsForArticle;
     }
 }

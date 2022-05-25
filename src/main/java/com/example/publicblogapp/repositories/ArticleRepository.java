@@ -13,12 +13,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findByTitle(String title);
 
-    @Query(value = "select c.text from tb_article a " +
-            "inner join tb_comment c where " +
-            "c.article_id = a.id and " +
-            "a.id = ?", nativeQuery = true)
-    List<String> findByCommentArticleId(Long articleId);
-
     @Query(value = "select a.* from tb_article a " +
             "inner join tb_user u where " +
             "u.id = a.user_id and " +

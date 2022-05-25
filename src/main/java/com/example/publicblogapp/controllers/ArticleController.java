@@ -5,10 +5,7 @@ import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
-import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
-import com.example.publicblogapp.requests.article.ArticleFindByIdRequest;
-import com.example.publicblogapp.requests.article.ArticlePostRequestBody;
-import com.example.publicblogapp.requests.article.ArticlePutRequestBody;
+import com.example.publicblogapp.requests.article.*;
 import com.example.publicblogapp.services.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +41,14 @@ public class ArticleController {
         var article = articleService.findById(articleId);
         var articleDTO = convertArticlesForFrontEnd.convertToArticleFindByIdRequest(article);
         return ResponseEntity.ok().body(articleDTO);
+    }
+
+    @GetMapping(path = "comments/{articleId}")
+    public ResponseEntity<GetCommentsForArticle> findCommentsForArticle(@PathVariable Long articleId)
+    {
+        var article = articleService.findById(articleId);
+        var commentsAndUsers = convertArticlesForFrontEnd.getCommentsForArticle(article);
+        return ResponseEntity.ok().body(commentsAndUsers);
     }
 
     @GetMapping(path = "/user/{userId}")
@@ -162,13 +167,5 @@ public class ArticleController {
 
         return ResponseEntity.ok().body(articlesDTO);
     }
-
-    @GetMapping(path = "/comment/article/{articleId}")
-    public ResponseEntity<Iterable<String>> findByArticleComment(@PathVariable Long articleId)
-    {
-        var articlesComments = articleService.findByArticleComment(articleId);
-        return ResponseEntity.ok().body(articlesComments);
-    }
-
 
 }
