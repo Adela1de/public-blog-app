@@ -44,7 +44,7 @@ public class ArticleController {
     }
 
     @GetMapping(path = "comments/{articleId}")
-    public ResponseEntity<GetCommentsForArticle> findCommentsForArticle(@PathVariable Long articleId)
+    public ResponseEntity<Iterable<GetCommentsForArticle>> findCommentsForArticle(@PathVariable Long articleId)
     {
         var article = articleService.findById(articleId);
         var commentsAndUsers = convertArticlesForFrontEnd.getCommentsForArticle(article);

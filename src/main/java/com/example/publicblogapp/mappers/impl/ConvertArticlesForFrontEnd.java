@@ -9,6 +9,7 @@ import com.example.publicblogapp.requests.article.GetCommentsForArticle;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ConvertArticlesForFrontEnd {
@@ -39,23 +40,19 @@ public class ConvertArticlesForFrontEnd {
         return articleFindByIdRequest;
     }
 
-    public GetCommentsForArticle getCommentsForArticle(Article article)
+    public List<GetCommentsForArticle> getCommentsForArticle(Article article)
     {
-        var getCommentsForArticle = new GetCommentsForArticle();
-        var listOfComments = new ArrayList<String>();
-        var listOfUsernames = new ArrayList<String>();
+        var getCommentsForArticle = new ArrayList<GetCommentsForArticle>();
 
         if(article.getComments() != null)
         {
             for(Comment com: article.getComments())
             {
-                listOfComments.add(com.getText());
-                listOfUsernames.add(com.getUser_commented().getUserName());
+                getCommentsForArticle.add(
+                        new GetCommentsForArticle(com.getText(), com.getUser_commented().getUserName())
+                );
             }
-            getCommentsForArticle.setComments(listOfComments);
-            getCommentsForArticle.setCommentedBy(listOfUsernames);
         }
-
         return getCommentsForArticle;
     }
 }

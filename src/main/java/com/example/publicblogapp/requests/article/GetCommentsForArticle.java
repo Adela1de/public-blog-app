@@ -1,14 +1,14 @@
 package com.example.publicblogapp.requests.article;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
+@AllArgsConstructor
 public class GetCommentsForArticle {
 
-    private List<String> Comments;
-    private List<String> CommentedBy;
+    private String Comments;
+    private String CommentedBy;
 }
