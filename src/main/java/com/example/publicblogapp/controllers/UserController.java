@@ -81,7 +81,7 @@ public class UserController {
         var favoritesConverted =
                 favorites.
                 stream().
-                map(convertArticlesForFrontEnd::convertToArticleRequest).
+                map(convertArticlesForFrontEnd::convertToArticleFindAllRequest).
                 collect(Collectors.toList());
         return ResponseEntity.ok().body(favoritesConverted);
     }

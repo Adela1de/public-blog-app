@@ -6,6 +6,7 @@ import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
 import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
+import com.example.publicblogapp.requests.article.ArticleFindByIdRequest;
 import com.example.publicblogapp.requests.article.ArticlePostRequestBody;
 import com.example.publicblogapp.requests.article.ArticlePutRequestBody;
 import com.example.publicblogapp.services.ArticleService;
@@ -32,16 +33,16 @@ public class ArticleController {
         var articlesConverted =
                 articles.
                 stream().
-                map(convertArticlesForFrontEnd::convertToArticleRequest).
+                map(convertArticlesForFrontEnd::convertToArticleFindAllRequest).
                 collect(Collectors.toList());
         return ResponseEntity.ok().body(articlesConverted);
     }
 
     @GetMapping(path = "/{articleId}")
-    public ResponseEntity<ArticleDTO> findById(@PathVariable Long articleId)
+    public ResponseEntity<ArticleFindByIdRequest> findById(@PathVariable Long articleId)
     {
         var article = articleService.findById(articleId);
-        var articleDTO = ArticleMapper.INSTANCE.toArticleDTO(article);
+        var articleDTO = convertArticlesForFrontEnd.convertToArticleFindByIdRequest(article);
         return ResponseEntity.ok().body(articleDTO);
     }
 
@@ -156,7 +157,7 @@ public class ArticleController {
         var articlesDTO =
                 articles.
                 stream().
-                map(convertArticlesForFrontEnd::convertToArticleRequest).
+                map(convertArticlesForFrontEnd::convertToArticleFindAllRequest).
                 collect(Collectors.toList());
 
         return ResponseEntity.ok().body(articlesDTO);

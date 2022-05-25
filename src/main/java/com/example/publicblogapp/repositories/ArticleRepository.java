@@ -22,6 +22,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "select a.* from tb_article a " +
             "inner join tb_user u where " +
             "u.id = a.user_id and " +
-            "u.user_name = ?", nativeQuery = true)
+            "u.user_name like ?", nativeQuery = true)
     List<Article> findByUsername(String username);
 }
