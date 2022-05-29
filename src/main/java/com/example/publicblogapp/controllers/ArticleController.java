@@ -6,8 +6,9 @@ import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.CommentMapper;
 import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
-import com.example.publicblogapp.model.entities.Comment;
+import com.example.publicblogapp.mappers.impl.ConvertCommentsForFrontEnd;
 import com.example.publicblogapp.requests.article.*;
+import com.example.publicblogapp.requests.comments.CommentConversionToFrontEnd;
 import com.example.publicblogapp.requests.comments.CommentPostRequestBody;
 import com.example.publicblogapp.services.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ConvertArticlesForFrontEnd convertArticlesForFrontEnd;
+    private final ConvertCommentsForFrontEnd convertCommentsForFrontEnd;
 
     @GetMapping
     public ResponseEntity<Iterable<ArticleFindAllRequest>> findAll()
@@ -172,12 +174,13 @@ public class ArticleController {
     }
 
     @PostMapping(path = "/article/{articleId}")
-    public ResponseEntity<Comment> postCommentOnArticle
+    public ResponseEntity<CommentConversionToFrontEnd> postCommentOnArticle
             (@PathVariable Long articleId, @RequestBody CommentPostRequestBody commentPostRequestBody)
     {
         var comment = CommentMapper.INSTANCE.toComment(commentPostRequestBody);
         var createdComment = articleService.addComment(articleId, comment);
-        return ResponseEntity.ok().body(createdComment);
+        var convertedComment = convertCommentsForFrontEnd.convertToFrontEnd(createdComment);
+        return ResponseEntity.ok().body(convertedComment);
 
     }
 
