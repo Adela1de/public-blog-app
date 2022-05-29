@@ -131,12 +131,12 @@ public class ArticleService {
         return updatedUser;
     }
 
-    public Article addComment(Long id, Comment comment)
+    public Comment addComment(Long id, Comment comment)
     {
-        var article = findArticleByIdOrElseThrowObjectNotFoundException(id);
+        findArticleByIdOrElseThrowObjectNotFoundException(id);
         userService.findByIdOrElseThrowObjectNotFoundException(comment.getUser_commented().getId());
-        commentRepository.save(comment);
-        return article;
+        var savedComment = commentRepository.save(comment);
+        return savedComment;
     }
 
 }

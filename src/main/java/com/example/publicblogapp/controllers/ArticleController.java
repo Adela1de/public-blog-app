@@ -6,6 +6,7 @@ import com.example.publicblogapp.mappers.ArticleMapper;
 import com.example.publicblogapp.mappers.CommentMapper;
 import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
+import com.example.publicblogapp.model.entities.Comment;
 import com.example.publicblogapp.requests.article.*;
 import com.example.publicblogapp.requests.comments.CommentPostRequestBody;
 import com.example.publicblogapp.services.ArticleService;
@@ -171,15 +172,12 @@ public class ArticleController {
     }
 
     @PostMapping(path = "/article/{articleId}")
-    public ResponseEntity<ArticleFindAllRequest> postCommentOnArticle
+    public ResponseEntity<Comment> postCommentOnArticle
             (@PathVariable Long articleId, @RequestBody CommentPostRequestBody commentPostRequestBody)
     {
         var comment = CommentMapper.INSTANCE.toComment(commentPostRequestBody);
-        var updatedArticle = articleService.addComment(articleId, comment);
-        var updatedArticleDTO =
-                convertArticlesForFrontEnd.
-                convertToArticleFindAllRequest(updatedArticle);
-        return ResponseEntity.ok().body(updatedArticleDTO);
+        var createdComment = articleService.addComment(articleId, comment);
+        return ResponseEntity.ok().body(createdComment);
 
     }
 
