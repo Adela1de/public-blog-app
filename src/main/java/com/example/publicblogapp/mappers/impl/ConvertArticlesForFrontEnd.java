@@ -5,7 +5,7 @@ import com.example.publicblogapp.model.entities.Category;
 import com.example.publicblogapp.model.entities.Comment;
 import com.example.publicblogapp.requests.article.ArticleFindAllRequest;
 import com.example.publicblogapp.requests.article.ArticleFindByIdRequest;
-import com.example.publicblogapp.requests.article.GetCommentsForArticle;
+import com.example.publicblogapp.requests.comments.CommentConversionToFrontEnd;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -40,16 +40,16 @@ public class ConvertArticlesForFrontEnd {
         return articleFindByIdRequest;
     }
 
-    public List<GetCommentsForArticle> getCommentsForArticle(Article article)
+    public List<CommentConversionToFrontEnd> getCommentsForArticle(Article article)
     {
-        var getCommentsForArticle = new ArrayList<GetCommentsForArticle>();
+        var getCommentsForArticle = new ArrayList<CommentConversionToFrontEnd>();
 
         if(article.getComments() != null)
         {
             for(Comment com: article.getComments())
             {
                 getCommentsForArticle.add(
-                        new GetCommentsForArticle(com.getText(), com.getUser_commented().getUserName())
+                        new CommentConversionToFrontEnd(com.getText(), com.getUser_commented().getUserName())
                 );
             }
         }
