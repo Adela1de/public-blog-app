@@ -49,7 +49,7 @@ public class DatabaseInitiation {
 
         var com1 = new Comment("WOW!", user1, art1);
         var com2 = new Comment("SUPER COOL!", user1, art2);
-        var com3= new Comment("No one cares!", user3, art3);
+        var com3 = new Comment("No one cares!", user3, art3);
         var com4 = new Comment("Very nice!", user4, art3);
 
         userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5));

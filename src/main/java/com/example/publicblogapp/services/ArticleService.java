@@ -2,6 +2,7 @@ package com.example.publicblogapp.services;
 
 import com.example.publicblogapp.exceptions.ObjectNotFoundException;
 import com.example.publicblogapp.model.entities.Article;
+import com.example.publicblogapp.model.entities.Comment;
 import com.example.publicblogapp.model.entities.User;
 import com.example.publicblogapp.repositories.ArticleRepository;
 import com.example.publicblogapp.repositories.CommentRepository;
@@ -130,5 +131,12 @@ public class ArticleService {
         return updatedUser;
     }
 
+    public Article addComment(Long id, Comment comment)
+    {
+        var article = findArticleByIdOrElseThrowObjectNotFoundException(id);
+        userService.findByIdOrElseThrowObjectNotFoundException(comment.getUser_commented().getId());
+        commentRepository.save(comment);
+        return article;
+    }
 
 }

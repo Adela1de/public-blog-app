@@ -3,9 +3,11 @@ package com.example.publicblogapp.controllers;
 import com.example.publicblogapp.dtos.article.ArticleDTO;
 import com.example.publicblogapp.dtos.user.UserDTO;
 import com.example.publicblogapp.mappers.ArticleMapper;
+import com.example.publicblogapp.mappers.CommentMapper;
 import com.example.publicblogapp.mappers.UserMapper;
 import com.example.publicblogapp.mappers.impl.ConvertArticlesForFrontEnd;
 import com.example.publicblogapp.requests.article.*;
+import com.example.publicblogapp.requests.comments.CommentPostRequestBody;
 import com.example.publicblogapp.services.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -166,6 +168,19 @@ public class ArticleController {
                 collect(Collectors.toList());
 
         return ResponseEntity.ok().body(articlesDTO);
+    }
+
+    @PostMapping(path = "/article/{articleId}")
+    public ResponseEntity<ArticleFindAllRequest> postCommentOnArticle
+            (@PathVariable Long articleId, @RequestBody CommentPostRequestBody commentPostRequestBody)
+    {
+        var comment = CommentMapper.INSTANCE.toComment(commentPostRequestBody);
+        var updatedArticle = articleService.addComment(articleId, comment);
+        var updatedArticleDTO =
+                convertArticlesForFrontEnd.
+                convertToArticleFindAllRequest(updatedArticle);
+        return ResponseEntity.ok().body(updatedArticleDTO);
+
     }
 
 }
